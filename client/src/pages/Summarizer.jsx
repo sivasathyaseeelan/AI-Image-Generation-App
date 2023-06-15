@@ -17,16 +17,14 @@ const Summarizer = () => {
         body: JSON.stringify({ userInput }),
       });
 
-      // const data = await response.json();
-      // setResult(data.result);
+      const data = await response.json();
+      console.log(data)
 
       // Clear the form
       setUserInput('');
     } catch (error) {
       console.log(error);
     }
-
-    console.log(JSON.stringify({ userInput }));
   };
 
   return (
