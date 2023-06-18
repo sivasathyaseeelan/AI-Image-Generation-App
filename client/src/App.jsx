@@ -2,7 +2,8 @@ import React from "react"
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom"
 import Home from './pages/Home'
 import Summarizer from './pages/Summarizer'
-import Auth from './pages/Auth'
+import Signin from "./pages/Signin"
+import Signup from "./pages/Signup"
 
 
 function App() {
@@ -32,7 +33,8 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/Summarizer' element={<Summarizer />} />
-          <Route path='/Auth' element={<Auth />} />
+          <Route path='/Signin' element={<Signin />} />
+          <Route path='/Signup' element={<Signup />} />
         </Routes>
       </main>
     </BrowserRouter>
