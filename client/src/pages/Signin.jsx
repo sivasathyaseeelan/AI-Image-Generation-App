@@ -9,11 +9,17 @@ const Signin = () => {
   const [Password,setPassword] = useState('')
   const [ShowPassword,setShowPassword] = useState(false)
 
+  const handleSubmit = () => {
+    
+  }
+
   return (
     <div>
       <div className='flex flex-col justify-center items-center min-h-[90vh] gap-1'>
         <h1 className='text-3xl font-semibold pb-3'>Sign in</h1>
-        <form className='flex flex-col gap-2 w-full max-w-xs md:max-w-sm'>
+        <form
+         className='flex flex-col gap-2 w-full max-w-xs md:max-w-sm'
+         onSubmit={handleSubmit}>
           <div className='relative flex justify-center items-center'>
             <input
             type='email' 
