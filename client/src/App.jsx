@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import Summarizer from './pages/Summarizer'
 import Signin from "./pages/Signin"
 import Signup from "./pages/Signup"
+import PrivateRouter from "./utils/PrivetRouter"
 
 
 function App() {
@@ -31,10 +32,12 @@ function App() {
       </header>
       <main>
         <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/Summarizer' element={<Summarizer />} />
+          <Route path='/' exact element={<Home />} />
           <Route path='/Signin' element={<Signin />} />
           <Route path='/Signup' element={<Signup />} />
+          <Route element={<PrivateRouter />}>
+            <Route path='/Summarizer' element={<Summarizer />} />
+          </Route>
         </Routes>
       </main>
     </BrowserRouter>
