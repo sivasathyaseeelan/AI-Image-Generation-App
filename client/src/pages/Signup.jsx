@@ -51,7 +51,6 @@ const Signup = () => {
 		if (data.token) {
       console.log(data.token)
 			localStorage.setItem('token', data.token)
-			alert('Login successful')
 		} else {
 			alert('Please check your username and password')
 		}
@@ -71,8 +70,8 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    
-    //interaction with API
+    if(password==repeatPassword){
+      //interaction with API
     const response = await fetch('http://127.0.0.1:5000/user/Signup', {
 			method: 'POST',
 			headers: {
@@ -91,7 +90,6 @@ const Signup = () => {
 		if (data.token) {
       console.log(data.token)
 			localStorage.setItem('token', data.token)
-			alert('Registered successful')
 		} else {
 			alert('Please check your details or User exists')
 		}
@@ -102,6 +100,11 @@ const Signup = () => {
 
 
     resetForm();
+
+    }
+    else{
+      alert('password doesnot match')
+    }
   }
 
   return (

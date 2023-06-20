@@ -43,7 +43,6 @@ const Signin = () => {
 		if (data.token) {
       console.log(data.token)
 			localStorage.setItem('token', data.token)
-			alert('Login successful')
 		} else {
 			alert('Please check your username and password')
 		}
@@ -81,7 +80,6 @@ const Signin = () => {
 		if (data.token) {
       console.log(data.token)
 			localStorage.setItem('token', data.token)
-			alert('Login successful')
 		} else {
 			alert('Please check your username and password')
 		}

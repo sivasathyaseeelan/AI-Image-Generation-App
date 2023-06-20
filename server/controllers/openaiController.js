@@ -18,12 +18,6 @@ const openaiController = async (req,res)=>{
         const response = await openai.createChatCompletion({
             model : "gpt-3.5-turbo",
             prompt :`Give me the summary of ${userInput}`,
-            max_tokens: 100,
-            temperature: 0,
-            top_p: 1.0,
-            frequency_penalty: 0.0,
-            presence_penalty: 0.0,
-            stop: ["\n"],
         })
 
         return res.status(200).json({
