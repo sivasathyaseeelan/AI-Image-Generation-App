@@ -1,16 +1,57 @@
 import React, { useState } from 'react'
 import { FcGoogle } from "react-icons/fc"
 import { BiHide } from "react-icons/bi"
+import { useGoogleLogin } from '@react-oauth/google';
 
 
 const Signin = () => {
 
-  const [Email,setEmail] = useState('')
-  const [Password,setPassword] = useState('')
+  const [email,setEmail] = useState('')
+  const [password,setPassword] = useState('')
   const [ShowPassword,setShowPassword] = useState(false)
 
-  const handleSubmit = () => {
+  // const Value = {
+  //   Email : Email,
+  //   Password : Password,
+  // }
+
+  const login = useGoogleLogin({
+    onSuccess: tokenResponse => console.log(tokenResponse),
+  });
+
+  const resetForm = () => {
+    setEmail('');
+    setPassword('');
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     
+    //interaction with API
+    const response = await fetch('http://127.0.0.1:5000/user/Signin', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				email,
+				password,
+			}),
+		})
+
+    const data = await response.json()
+
+		if (data.user) {
+			localStorage.setItem('token', data.user)
+			alert('Login successful')
+			window.location.href = '/Summarizer'
+		} else {
+			alert('Please check your username and password')
+		}
+
+
+    resetForm();
   }
 
   return (
@@ -24,7 +65,7 @@ const Signin = () => {
             <input
             type='email' 
             placeholder='Email'
-            value={Email}
+            value={email}
             onChange={(e)=>{setEmail(e.target.value)}}
             required
             className='shadow shadow-slate-700 rounded p-2 w-full max-w-xs md:max-w-sm'
@@ -34,7 +75,7 @@ const Signin = () => {
             <input
             type={ShowPassword ? 'text' : 'password'} 
             placeholder='Password'
-            value={Password}
+            value={password}
             onChange={(e)=>{setPassword(e.target.value)}}
             required
             className='shadow shadow-slate-700 rounded p-2 w-full max-w-xs md:max-w-sm'
@@ -48,7 +89,11 @@ const Signin = () => {
           </button>
         </form>
         <p>or</p>
-        <button className='flex justify-center items-center gap-3 bg-sky-500 hover:bg-sky-600 rounded w-full text-white p-2 max-w-xs md:max-w-sm'><FcGoogle size={20} /> Sign in with google</button>
+        <button
+         className='flex justify-center items-center gap-3 bg-sky-500 hover:bg-sky-600 rounded w-full text-white p-2 max-w-xs md:max-w-sm'
+         onClick={() => login()}>
+          <FcGoogle size={20} /> Sign in with google
+         </button>
         <span><a href='./Signup'>Not registered yet? Sign up</a></span>
       </div>
     </div>
