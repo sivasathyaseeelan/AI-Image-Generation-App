@@ -29,8 +29,30 @@ const Signup = () => {
     setRepeatPassword('');
   }
 
+  const handleLogin = async (tokenResponse) => {
+    const response = await fetch('http://127.0.0.1:5000/user/Signin', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				tokenResponse
+			}),
+		})
+
+  const data = await response.json()
+
+  console.log(data)
+
+	// if (data.status === 'ok') {
+	// 	localStorage.setItem('token', data.user)
+	// 	alert('Successfully signed up')
+	// 	window.location.href = '/Summarizer'
+	// }
+  }
+
   const login = useGoogleLogin({
-    onSuccess: tokenResponse => console.log(tokenResponse),
+    onSuccess: tokenResponse => handleLogin(tokenResponse),
   });
 
   const handleSubmit = async (e) => {
@@ -59,7 +81,9 @@ const Signup = () => {
 		const data = await response.json()
 
 		if (data.status === 'ok') {
-			history.push('/login')
+			localStorage.setItem('token', data.user)
+			alert('Successfully signed up')
+			window.location.href = '/Summarizer'
 		}
 
 

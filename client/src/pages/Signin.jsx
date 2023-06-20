@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FcGoogle } from "react-icons/fc"
 import { BiHide } from "react-icons/bi"
 import { useGoogleLogin } from '@react-oauth/google';
@@ -15,8 +15,26 @@ const Signin = () => {
   //   Password : Password,
   // }
 
+  useEffect(()=>{
+    if(localStorage.getItem('token')){
+      window.location.href = '/Summarizer'
+    }
+  },[])
+
+  const handleLogin = async (tokenResponse) => {
+    const response = await fetch('http://127.0.0.1:5000/user/Signin', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				tokenResponse
+			}),
+		})
+  }
+
   const login = useGoogleLogin({
-    onSuccess: tokenResponse => console.log(tokenResponse),
+    onSuccess: tokenResponse => handleLogin(tokenResponse),
   });
 
   const resetForm = () => {
@@ -42,13 +60,17 @@ const Signin = () => {
 
     const data = await response.json()
 
-		if (data.user) {
-			localStorage.setItem('token', data.user)
+		if (data.token) {
+      console.log(data.token)
+			localStorage.setItem('token', data.token)
 			alert('Login successful')
-			window.location.href = '/Summarizer'
 		} else {
 			alert('Please check your username and password')
 		}
+
+    if(localStorage.getItem('token')){
+      window.location.href = '/Summarizer'
+    }
 
 
     resetForm();
