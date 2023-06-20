@@ -27,6 +27,25 @@ const signinController = async(req,res) =>{
             const email = response.data.email;
 
             console.log({firstName,lastName,email})
+
+            const oldUser = await User.findOne({ email });
+
+            if (oldUser){
+
+                const token = jwt.sign( { email: oldUser.email, id: oldUser._id }, process.env.JWT_SECRET, { expiresIn: "1d" } );
+
+                console.log(token)
+                return res.status(201).json({ oldUser, token });
+                
+            }
+            else{
+                const result = await User.create({ email, firstName, lastName });
+
+                const token = jwt.sign( { email: result.email, id: result._id }, process.env.JWT_SECRET, { expiresIn: "1d" } );
+                
+                console.log(token)
+                return res.status(201).json({ result, token });
+            }
         
         })
     }
@@ -79,8 +98,9 @@ const signupController = async(req,res) => {
 
                 const token = jwt.sign( { email: oldUser.email, id: oldUser._id }, process.env.JWT_SECRET, { expiresIn: "1d" } );
 
-                res.status(201).json({ oldUser, token });
                 console.log(token)
+                return res.status(201).json({ oldUser, token });
+                
             }
             else{
                 const result = await User.create({ email, firstName, lastName });
@@ -88,7 +108,7 @@ const signupController = async(req,res) => {
                 const token = jwt.sign( { email: result.email, id: result._id }, process.env.JWT_SECRET, { expiresIn: "1d" } );
                 
                 console.log(token)
-                res.status(201).json({ result, token });
+                return res.status(201).json({ result, token });
             }
         
         })

@@ -21,8 +21,14 @@ const Signin = () => {
     }
   },[])
 
+
+  const resetForm = () => {
+    setEmail('');
+    setPassword('');
+  }
+
   const handleLogin = async (tokenResponse) => {
-    const response = await fetch('http://127.0.0.1:5000/user/Signin', {
+    const response = await fetch('http://127.0.0.1:5000/user/Signup', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -31,16 +37,28 @@ const Signin = () => {
 				tokenResponse
 			}),
 		})
+
+    const data = await response.json()
+    console.log(data)
+		if (data.token) {
+      console.log(data.token)
+			localStorage.setItem('token', data.token)
+			alert('Login successful')
+		} else {
+			alert('Please check your username and password')
+		}
+
+    if(localStorage.getItem('token')){
+      window.location.href = '/Summarizer'
+    }
+
+
+    resetForm();
   }
 
   const login = useGoogleLogin({
     onSuccess: tokenResponse => handleLogin(tokenResponse),
   });
-
-  const resetForm = () => {
-    setEmail('');
-    setPassword('');
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,7 +77,7 @@ const Signin = () => {
 		})
 
     const data = await response.json()
-
+    console.log(data)
 		if (data.token) {
       console.log(data.token)
 			localStorage.setItem('token', data.token)

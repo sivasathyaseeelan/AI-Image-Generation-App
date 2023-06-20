@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FcGoogle } from "react-icons/fc"
 import { BiHide } from "react-icons/bi"
 import { useGoogleLogin } from '@react-oauth/google'
@@ -21,6 +21,12 @@ const Signup = () => {
   //   RepeatPassword : RepeatPassword,
   // }
 
+  useEffect(()=>{
+    if(localStorage.getItem('token')){
+      window.location.href = '/Summarizer'
+    }
+  },[])
+
   const resetForm = () => {
     setFirstName('');
     setLastName('');
@@ -30,7 +36,7 @@ const Signup = () => {
   }
 
   const handleLogin = async (tokenResponse) => {
-    const response = await fetch('http://127.0.0.1:5000/user/Signin', {
+    const response = await fetch('http://127.0.0.1:5000/user/Signup', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -40,15 +46,22 @@ const Signup = () => {
 			}),
 		})
 
-  const data = await response.json()
+    const data = await response.json()
+    console.log(data)
+		if (data.token) {
+      console.log(data.token)
+			localStorage.setItem('token', data.token)
+			alert('Login successful')
+		} else {
+			alert('Please check your username and password')
+		}
 
-  console.log(data)
+    if(localStorage.getItem('token')){
+      window.location.href = '/Summarizer'
+    }
 
-	// if (data.status === 'ok') {
-	// 	localStorage.setItem('token', data.user)
-	// 	alert('Successfully signed up')
-	// 	window.location.href = '/Summarizer'
-	// }
+
+    resetForm();
   }
 
   const login = useGoogleLogin({
@@ -57,12 +70,7 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({
-      email,
-      password,
-      firstName,
-      lastName
-    })
+
     
     //interaction with API
     const response = await fetch('http://127.0.0.1:5000/user/Signup', {
@@ -78,13 +86,19 @@ const Signup = () => {
 			}),
 		})
 
-		const data = await response.json()
-
-		if (data.status === 'ok') {
-			localStorage.setItem('token', data.user)
-			alert('Successfully signed up')
-			window.location.href = '/Summarizer'
+    const data = await response.json()
+    console.log(data)
+		if (data.token) {
+      console.log(data.token)
+			localStorage.setItem('token', data.token)
+			alert('Registered successful')
+		} else {
+			alert('Please check your details or User exists')
 		}
+
+    if(localStorage.getItem('token')){
+      window.location.href = '/Summarizer'
+    }
 
 
     resetForm();
